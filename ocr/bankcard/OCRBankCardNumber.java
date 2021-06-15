@@ -25,8 +25,8 @@ public class OCRBankCardNumber {
 //        Mat cardImg = imread("ocr/bankcard/image-data/OCRBankCard2.png");
         ImageWindowUtil.imshow("cardImg", cardImg);
 
-        //==========´¦Àícard========================
-        // ĞÎÌ¬Ñ§ - kernelÀ´È¥¸ÉÈÅ£¬È¥ÔëÉù
+        //==========å¤„ç†card========================
+        // å½¢æ€å­¦ - kernelæ¥å»å¹²æ‰°ï¼Œå»å™ªå£°
         Mat rectKernel = getStructuringElement(MORPH_RECT, new Size(10, 3));
         Mat sqKernel = getStructuringElement(MORPH_RECT, new Size(5, 5));
 
@@ -41,31 +41,31 @@ public class OCRBankCardNumber {
         Mat grayResizedCardImg = new Mat();
         cvtColor(resizedCardImg, grayResizedCardImg, COLOR_BGR2GRAY);
 
-        // ÀñÃ±£¬¶¥Ã±²Ù×÷£¬Í»³ö¸üÃ÷ÁÁµÄÇøÓò£¬ÉÏÃæÎÒÃÇ°´ÕÕÊı×Ö´óĞ¡ĞèÒªĞÂ½¨ÁËÒ»¸örectKernel
+        // ç¤¼å¸½ï¼Œé¡¶å¸½æ“ä½œï¼Œçªå‡ºæ›´æ˜äº®çš„åŒºåŸŸï¼Œä¸Šé¢æˆ‘ä»¬æŒ‰ç…§æ•°å­—å¤§å°éœ€è¦æ–°å»ºäº†ä¸€ä¸ªrectKernel
         Mat tophat = new Mat();
         morphologyEx(grayResizedCardImg, tophat, MORPH_TOPHAT, rectKernel);
         ImageWindowUtil.imshow("tophat", tophat);
 
-        // sobel - ÕâÀïÖ»×öÁËx£¬Í¨³£ÎÒÃÇ»á¼ÆËãx£¬y£¬È»ºóÔÚabs£¬ÔÚnormalize
+        // sobel - è¿™é‡Œåªåšäº†xï¼Œé€šå¸¸æˆ‘ä»¬ä¼šè®¡ç®—xï¼Œyï¼Œç„¶ååœ¨absï¼Œåœ¨normalize
         Mat gradX = new Mat();
         Sobel(tophat, gradX, CV_32F, 1, 0);
-        // -1 ºÍ 3Ğ§¹ûÒ»Ñù£¬Ä¬ÈÏÊÇ3*3
+        // -1 å’Œ 3æ•ˆæœä¸€æ ·ï¼Œé»˜è®¤æ˜¯3*3
 //        Sobel(tophat, gradX, CV_32F, 1, 0, -1,
 //                1, 0, BORDER_DEFAULT);
         convertScaleAbs(gradX, gradX);
 
-        // ÏÂÃæÈçºÎ½«Êı×Ö¿´×öÒ»¸ö¿é¶ù£¬±Õ²Ù×÷£¨ÅòÕÍÔÙ¸¯Ê´£©£¬½«Êı×ÖÁ¬ÔÚÒ»Æğ
+        // ä¸‹é¢å¦‚ä½•å°†æ•°å­—çœ‹åšä¸€ä¸ªå—å„¿ï¼Œé—­æ“ä½œï¼ˆè†¨èƒ€å†è…èš€ï¼‰ï¼Œå°†æ•°å­—è¿åœ¨ä¸€èµ·
         morphologyEx(gradX, gradX, MORPH_CLOSE, rectKernel);
-        // THRESH_OTSU»á×Ô¶¯Ñ°ÕÒºÏÊÊµÄãĞÖµ£¬ÊÊºÏË«·å£¬Ğè°ÑãĞÖµ²ÎÊıÉèÖÃÎª0
+        // THRESH_OTSUä¼šè‡ªåŠ¨å¯»æ‰¾åˆé€‚çš„é˜ˆå€¼ï¼Œé€‚åˆåŒå³°ï¼Œéœ€æŠŠé˜ˆå€¼å‚æ•°è®¾ç½®ä¸º0
         Mat threshGradX = new Mat();
         threshold(gradX, threshGradX, 0, 255, THRESH_OTSU);
         ImageWindowUtil.imshow("threshGradX", threshGradX);
 
-        // Êı×ÖÊÇÁ¬ÆğÀ´ÁË£¬µ«ÊÇ¿é¶ùÀïÓĞ¿ÕÏ¶
+        // æ•°å­—æ˜¯è¿èµ·æ¥äº†ï¼Œä½†æ˜¯å—å„¿é‡Œæœ‰ç©ºéš™
         morphologyEx(threshGradX, threshGradX, MORPH_CLOSE, sqKernel);
         ImageWindowUtil.imshow("threshGradX 2", threshGradX);
 
-        // ¼ÆËãÂÖÀª
+        // è®¡ç®—è½®å»“
         MatVector numBlockContours = new MatVector();
         findContours(threshGradX.clone(), numBlockContours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
@@ -76,12 +76,12 @@ public class OCRBankCardNumber {
 
         List<Mat> selectedNumBlockContoursList = new ArrayList<>();
         for (int i = 0; i < numBlockContours.size(); i++) {
-            // ¼ÆËãÍâ½Ó¾ØĞÎ
+            // è®¡ç®—å¤–æ¥çŸ©å½¢
             Mat contour = numBlockContours.get(i);
             Rect r = boundingRect(contour);
             float ar = r.width() * 1F / r.height();
 
-            // Ñ¡ÔñºÏÊÊµÄÇøÓò£¬¸ù¾İÊµ¼ÊÈÎÎñÀ´£¬ÕâÀïµÄ»ù±¾¶¼ÊÇËÄ×ÖÒ»×é
+            // é€‰æ‹©åˆé€‚çš„åŒºåŸŸï¼Œæ ¹æ®å®é™…ä»»åŠ¡æ¥ï¼Œè¿™é‡Œçš„åŸºæœ¬éƒ½æ˜¯å››å­—ä¸€ç»„
             if (ar > 2.5 && ar < 4.0) {
                 System.out.println(ar + ", " + r.width() + ", " + r.height());
                 if ((r.width() > 45 && r.width() < 55) & (r.height() > 10 && r.height() < 20)) {
@@ -97,7 +97,7 @@ public class OCRBankCardNumber {
 
         List<Integer> cardNums = new ArrayList<>();
 
-        // ±éÀúÅÅºÃĞòµÄÊı×Ö¿é
+        // éå†æ’å¥½åºçš„æ•°å­—å—
         MatVector sortedNumBlockContours = ContourSortUtil.sortContours(selectedNumBlockContours,
                 ContourSortUtil.CS_PS_X, false);
         for (int i = 0; i < sortedNumBlockContours.size(); i++) {
@@ -109,8 +109,8 @@ public class OCRBankCardNumber {
                     originalRoi.height() + 10);
             Mat groupOfNums = grayResizedCardImg.apply(resizedRoi);
 
-            // ÕÒµ½¿é¶ùÖ®ºó¾ÍÊÇ¶ÓÃ¿¸öÊı×Ö½øĞĞÂÖÀª¼ì²âÁË
-            // Ô¤´¦Àí - ¼ÆËãÂÖÀª
+            // æ‰¾åˆ°å—å„¿ä¹‹åå°±æ˜¯é˜Ÿæ¯ä¸ªæ•°å­—è¿›è¡Œè½®å»“æ£€æµ‹äº†
+            // é¢„å¤„ç† - è®¡ç®—è½®å»“
             threshold(groupOfNums, groupOfNums, 0, 255, THRESH_OTSU);
 //            ImageWindowUtil.imshow("groupOfNums" + i, groupOfNums);
 
@@ -119,7 +119,7 @@ public class OCRBankCardNumber {
             MatVector sortedNumContours = ContourSortUtil.sortContours(numContours, ContourSortUtil.CS_PS_X, false);
 
             List<String> groupOutput = new ArrayList<>();
-            // ¼ÆËãÃ¿Ò»¸ö×éÖĞµÄÃ¿Ò»¸öÊıÖµ
+            // è®¡ç®—æ¯ä¸€ä¸ªç»„ä¸­çš„æ¯ä¸€ä¸ªæ•°å€¼
             for (int j = 0; j < sortedNumContours.size(); j++) {
                 Mat num = sortedNumContours.get(j);
                 Rect numRoi = boundingRect(num);
@@ -127,8 +127,8 @@ public class OCRBankCardNumber {
                 resize(numImg, numImg, new Size(57, 88));
                 // ImageWindowUtil.imshow("numImg" + i + "," + j, numImg);
 
-                // ¼ÆËãÆ¥ÅäµÃ·Ö
-                // ÔÚÄ£°æÖĞ¼ÆËãÃ¿Ò»¸öµÃ·Ö
+                // è®¡ç®—åŒ¹é…å¾—åˆ†
+                // åœ¨æ¨¡ç‰ˆä¸­è®¡ç®—æ¯ä¸€ä¸ªå¾—åˆ†
                 double maxScore = Double.MIN_VALUE;
                 int cardNum = -1;
                 for (int k = 0; k < digits.size(); k++) {
@@ -146,7 +146,7 @@ public class OCRBankCardNumber {
                 groupOutput.add(String.valueOf(cardNum));
                 cardNums.add(cardNum);
             }
-            // »­³ö½á¹û
+            // ç”»å‡ºç»“æœ
             rectangle(resizedCardImg, resizedRoi, Scalar.RED);
             putText(resizedCardImg, String.join(",", groupOutput),
                     new Point(resizedRoi.x(), resizedRoi.y() - 15),
@@ -172,9 +172,9 @@ public class OCRBankCardNumber {
         ImageWindowUtil.imshow("Template bianry", binary);
 
         // contours
-        // ÂÖÀª¼ì²âfindContoursº¯Êı½ÓÊÜµÄ²ÎÊıÎª¶şÖµÍ¼£¬¼´ºÚ°×µÄ£¨²»ÊÇ»Ò¶ÈÍ¼£©£¬
-        // RETR_EXTERNALÖ»¼ì²âÍâÂÖÀª£¬CHAIN_APPROX_SIMPLEÖ»±£ÁôÖÕµã×ø±ê£¨½Ç¼â¼â£©
-        // ·µ»ØµÄlistÖĞÃ¿¸öÔªËØ¶¼ÊÇÍ¼ÏñµÄÒ»¸öÂÖÀª
+        // è½®å»“æ£€æµ‹findContourså‡½æ•°æ¥å—çš„å‚æ•°ä¸ºäºŒå€¼å›¾ï¼Œå³é»‘ç™½çš„ï¼ˆä¸æ˜¯ç°åº¦å›¾ï¼‰ï¼Œ
+        // RETR_EXTERNALåªæ£€æµ‹å¤–è½®å»“ï¼ŒCHAIN_APPROX_SIMPLEåªä¿ç•™ç»ˆç‚¹åæ ‡ï¼ˆè§’å°–å°–ï¼‰
+        // è¿”å›çš„listä¸­æ¯ä¸ªå…ƒç´ éƒ½æ˜¯å›¾åƒçš„ä¸€ä¸ªè½®å»“
         MatVector contours = new MatVector();
         findContours(binary.clone(), contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
         Mat drawContoursImg = numTemplImg.clone();
@@ -190,7 +190,7 @@ public class OCRBankCardNumber {
         Map<Integer, Mat> digits = new HashMap<>();
         // loop sorted contours
         for (int i = 0; i < sortedContours.size(); i++) {
-            // ¼ÆËãÍâ½Ó¾ØĞÎ²¢ÇÒresize³ÉºÏÊÊµÄ´óĞ¡
+            // è®¡ç®—å¤–æ¥çŸ©å½¢å¹¶ä¸”resizeæˆåˆé€‚çš„å¤§å°
             Mat contour = sortedContours.get(i);
             Rect r = boundingRect(contour);
             Mat roi = binary.apply(r);

@@ -4,7 +4,7 @@ import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Scalar;
 
 /**
- * ½«ÂÖÀªÀï¼ÆËãµÃµ½µÄÊı¾İ»ã×ÜÔÚÕâÀï£¬·½±ãºóÃæÉú³ÉsvgµÈ¡£
+ * å°†è½®å»“é‡Œè®¡ç®—å¾—åˆ°çš„æ•°æ®æ±‡æ€»åœ¨è¿™é‡Œï¼Œæ–¹ä¾¿åé¢ç”Ÿæˆsvgç­‰ã€‚
  *
  * @author Neal
  * @date 2021/6/14

@@ -25,8 +25,8 @@ public class MapColorSampleAnalysis {
 
     public static List<ContourData> process(Mat src) {
 
-        // ÊÖ¶¯Ñ¡ÔñÇøÓò ROI
-        // ÕâÀï°´ÕÕÔ­Ìâ±ÈÀıÕÒÁËÏÂµã£¬¿ÉÒÔ°´ÕÕÊµ¼ÊÇé¿öÕÒ³ö¶à±ßĞÎµÄµã
+        // æ‰‹åŠ¨é€‰æ‹©åŒºåŸŸ ROI
+        // è¿™é‡ŒæŒ‰ç…§åŸé¢˜æ¯”ä¾‹æ‰¾äº†ä¸‹ç‚¹ï¼Œå¯ä»¥æŒ‰ç…§å®é™…æƒ…å†µæ‰¾å‡ºå¤šè¾¹å½¢çš„ç‚¹
         Point hatPoints = new Point(4);
         int srcW = src.cols(), srcH = src.rows();
         hatPoints.position(0).x((int) Math.round(srcW * 0.85)).y((int) Math.round(srcH * 0.36));
@@ -34,26 +34,26 @@ public class MapColorSampleAnalysis {
         hatPoints.position(2).x((int) Math.round(srcW * 0.89)).y((int) Math.round(srcH * 0.9));
         hatPoints.position(3).x((int) Math.round(srcW * 0.85)).y((int) Math.round(srcH * 0.9));
 
-        // ÖÆ×÷Ò»¸öºÚ°×mask
+        // åˆ¶ä½œä¸€ä¸ªé»‘ç™½mask
         Mat mask = Mat.zeros(src.size(), CV_8UC1).asMat();
         fillConvexPoly(mask, hatPoints.position(0), 4, Scalar.WHITE, CV_AA, 0);
         ImageWindowUtil.imshow("mask", mask);
 
-        // É¾³ıµô²»ĞèÒªµÄµØ·½,Ö»±£ÁôROI region of interest
+        // åˆ é™¤æ‰ä¸éœ€è¦çš„åœ°æ–¹,åªä¿ç•™ROI region of interest
         Mat roi = new Mat();
         bitwise_and(src, src, roi, mask);
         ImageWindowUtil.imshow("roi", roi);
 
-        // ±ßÔµ¼ì²â - ÒòÎªÍ¼Æ¬ÒÑ¾­ÑÕÉ«·ÖÃ÷£¬¿ÉÒÔ¿ªÊ¼¼ì²â±ßÔµÁË
+        // è¾¹ç¼˜æ£€æµ‹ - å› ä¸ºå›¾ç‰‡å·²ç»é¢œè‰²åˆ†æ˜ï¼Œå¯ä»¥å¼€å§‹æ£€æµ‹è¾¹ç¼˜äº†
         Mat edges = new Mat();
         Canny(roi, edges, 80, 180);
         ImageWindowUtil.imshow("Canny", edges);
 
-        // ¼ÆËãÂÖÀª - ¼ÆËã³ö±ßÔµ¾Í¿ÉÒÔ¼ÆËãÂÖÀªÁË
+        // è®¡ç®—è½®å»“ - è®¡ç®—å‡ºè¾¹ç¼˜å°±å¯ä»¥è®¡ç®—è½®å»“äº†
         MatVector contours = new MatVector();
         findContours(edges.clone(), contours, RETR_LIST, CHAIN_APPROX_SIMPLE);
 
-        // »­³öÂÖÀª - ²âÊÔÓÃ
+        // ç”»å‡ºè½®å»“ - æµ‹è¯•ç”¨
         Mat drawContoursImg = roi.clone();
         drawContours(drawContoursImg, contours, -1, Scalar.RED);
         ImageWindowUtil.imshow("drawContoursImg", drawContoursImg);
@@ -62,7 +62,7 @@ public class MapColorSampleAnalysis {
         Mat drawRectImg = roi.clone();
         Scalar prevBFR = null;
         for (int i = 0; i < contours.size(); i++) {
-            // ¼ÆËãÍâ½Ó¾ØĞÎ
+            // è®¡ç®—å¤–æ¥çŸ©å½¢
             Mat contour = contours.get(i);
             Rect r = boundingRect(contour);
             rectangle(drawRectImg, r, Scalar.RED);
@@ -70,7 +70,7 @@ public class MapColorSampleAnalysis {
             double area = contourArea(contour);
             if (area > 50 && area < 150) {
 
-                // ÀûÓÃÔ­Í¼À´ÖÆ×÷Ò»¸öÃÉ°æ
+                // åˆ©ç”¨åŸå›¾æ¥åˆ¶ä½œä¸€ä¸ªè’™ç‰ˆ
                 Mat mask4contour = Mat.zeros(roi.size(), CV_8UC1).asMat();
                 fillConvexPoly(mask4contour, contour, Scalar.WHITE);
                 Scalar cntBGR = mean(roi, mask4contour);

@@ -3,8 +3,8 @@ package map;
 import org.bytedeco.opencv.opencv_core.Mat;
 
 /**
- * 获取MapColorSample颜色图例后面的字
- * todo: tessaract识别中文
+ * 鑾峰彇MapColorSample棰滆壊鍥句緥鍚庨潰鐨勫瓧
+ * todo: tessaract璇嗗埆涓枃
  *
  * @author Neal
  * @date 2021/6/14

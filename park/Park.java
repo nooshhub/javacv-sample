@@ -25,7 +25,7 @@ public class Park {
         Mat src = imread("park/image-data/park1.png");
         ImageWindowUtil.imshow("src", src);
 
-        // µÍÓÚlowerºÍ¸ßÓÚupperµÄ²¿·Ö±ä³É0£¬Ö®¼ä±äÎª255£¬Ïàµ±ÓÚ¹ıÂË±³¾°
+        // ä½äºlowerå’Œé«˜äºupperçš„éƒ¨åˆ†å˜æˆ0ï¼Œä¹‹é—´å˜ä¸º255ï¼Œç›¸å½“äºè¿‡æ»¤èƒŒæ™¯
         Mat lower = new Mat(new Scalar(120, 120, 120, 0));
         Mat upper = new Mat(Scalar.WHITE);
         Mat whiteMask = new Mat();
@@ -44,8 +44,8 @@ public class Park {
         Canny(gray, edges, 50, 200);
         ImageWindowUtil.imshow("edges", edges);
 
-        // ÊÖ¶¯Ñ¡ÔñÇøÓò
-        // ÕâÀï°´ÕÕÔ­Ìâ±ÈÀıÕÒÁËÏÂµã£¬¿ÉÒÔ°´ÕÕÊµ¼ÊÇé¿öÕÒ³ö¶à±ßĞÎµÄµã
+        // æ‰‹åŠ¨é€‰æ‹©åŒºåŸŸ
+        // è¿™é‡ŒæŒ‰ç…§åŸé¢˜æ¯”ä¾‹æ‰¾äº†ä¸‹ç‚¹ï¼Œå¯ä»¥æŒ‰ç…§å®é™…æƒ…å†µæ‰¾å‡ºå¤šè¾¹å½¢çš„ç‚¹
         Point hatPoints = new Point(6);
         int srcW = src.cols(), srcH = src.rows();
         hatPoints.position(0).x((int) Math.round(srcW * 0.05)).y((int) Math.round(srcH * 0.65));
@@ -58,29 +58,29 @@ public class Park {
         fillConvexPoly(mask, hatPoints.position(0), 6, Scalar.WHITE, CV_AA, 0);
         ImageWindowUtil.imshow("mask", mask);
 
-        // É¾³ıµô²»ĞèÒªµÄµØ·½,Ö»±£ÁôROI region of interest
+        // åˆ é™¤æ‰ä¸éœ€è¦çš„åœ°æ–¹,åªä¿ç•™ROI region of interest
         Mat roi = new Mat();
-        // TODO£ºÎªÉ¶ÕâÁ½ÖÖĞ´·¨£¬½â¹ÍÒ»Ñù£¿
+        // TODOï¼šä¸ºå•¥è¿™ä¸¤ç§å†™æ³•ï¼Œè§£é›‡ä¸€æ ·ï¼Ÿ
         bitwise_and(edges, edges, roi, mask);
 //        bitwise_and(edges, mask, roi);
         ImageWindowUtil.imshow("roi", roi);
 
-        // ÀûÓÃÍ£³µÎ»µÄÏßÀ´ÕÒ³µÎ», hough line
-        // ÊäÈëµÄÍ¼ÏóĞèÒªÊ±±ßÔµ¼ì²âºóµÄ½á¹û£¬ÊäÈë²ÎÊı°´ÕÕÍ¼Æ¬Àï³µÎ»ÏßÀ´¾ö¶¨µÄ£¬°´Êµ¼ÊĞèÒªµ÷
+        // åˆ©ç”¨åœè½¦ä½çš„çº¿æ¥æ‰¾è½¦ä½, hough line
+        // è¾“å…¥çš„å›¾è±¡éœ€è¦æ—¶è¾¹ç¼˜æ£€æµ‹åçš„ç»“æœï¼Œè¾“å…¥å‚æ•°æŒ‰ç…§å›¾ç‰‡é‡Œè½¦ä½çº¿æ¥å†³å®šçš„ï¼ŒæŒ‰å®é™…éœ€è¦è°ƒ
         Vec4iVector lines = new Vec4iVector();
-        // rho¾àÀë¾«¶È
+        // rhoè·ç¦»ç²¾åº¦
         double rho = 0.1;
-        // theta½Ç¶È¾«¶È
+        // thetaè§’åº¦ç²¾åº¦
         double theta = Math.PI / 10;
-        // threshold³´¹ÉÉè¶¨ãĞÖµ²ÅÄÜ±»¼ì²â³öÏß¶Î
+        // thresholdç‚’è‚¡è®¾å®šé˜ˆå€¼æ‰èƒ½è¢«æ£€æµ‹å‡ºçº¿æ®µ
         int threshold = 15;
-        // minLineLengthÏßµÄ×î¶Ì³¤¶È£¬±ÈÕâ¶ÌµÄ¶¼±»ºöÂÔ
+        // minLineLengthçº¿çš„æœ€çŸ­é•¿åº¦ï¼Œæ¯”è¿™çŸ­çš„éƒ½è¢«å¿½ç•¥
         int minLineLength = 9;
-        // maxLineGapÁ½ÌõÖ±ÏßÖ®¼äµÄ×î´ó¼ä¸ô£¬Ğ¡ÓÚ´ËÖµ£¬ÈÏÎªÊÇÒ»ÌõÏß
+        // maxLineGapä¸¤æ¡ç›´çº¿ä¹‹é—´çš„æœ€å¤§é—´éš”ï¼Œå°äºæ­¤å€¼ï¼Œè®¤ä¸ºæ˜¯ä¸€æ¡çº¿
         int maxLineGap = 4;
         HoughLinesP(roi, lines, rho, theta, threshold, minLineLength, maxLineGap);
 
-        // »­³öÏßµÄÎ»ÖÃ
+        // ç”»å‡ºçº¿çš„ä½ç½®
         Mat tmpSrc4Draw = src.clone();
         System.out.println("lines total " + lines.size());
         List<Scalar4i> filteredLines = new ArrayList<>();
@@ -96,10 +96,10 @@ public class Park {
         System.out.println("lines draw " + filteredLines.size());
         ImageWindowUtil.imshow("tmpSrc4Draw", tmpSrc4Draw);
 
-        // »®·ÖÇøÓò
-        // ¶ÔÖ±Ïß°´ÕÕx1½øĞĞÅÅĞò
+        // åˆ’åˆ†åŒºåŸŸ
+        // å¯¹ç›´çº¿æŒ‰ç…§x1è¿›è¡Œæ’åº
         Collections.sort(filteredLines, (l1, l2) -> l1.get(0) - l2.get(0));
-        // ÕÒµ½¶à¸öÁĞ£¬Ïàµ±ÓÚÃ¿ÁĞÒ»ÅÅ³µ
+        // æ‰¾åˆ°å¤šä¸ªåˆ—ï¼Œç›¸å½“äºæ¯åˆ—ä¸€æ’è½¦
         Map<Integer, List<Scalar4i>> clusters = new HashMap<>();
         int dIndex = 0;
         int clusDist = 10;
@@ -122,7 +122,7 @@ public class Park {
             }
         }
 
-        // µÃµ½×ø±ê
+        // å¾—åˆ°åæ ‡
         Map<Integer, Scalar4i> rects = new HashMap<>();
         int i = 0;
         for (List<Scalar4i> cleaned : clusters.values()) {
@@ -145,7 +145,7 @@ public class Park {
         }
         System.out.println("Num of Parking Lanes " + rects.size());
 
-        // °ÑÁĞ¾ØĞÎ»­³öÀ´
+        // æŠŠåˆ—çŸ©å½¢ç”»å‡ºæ¥
         Mat tmpSrc4Block = src.clone();
         int buff = 7;
         rects.forEach((key, rect) -> {
@@ -161,7 +161,7 @@ public class Park {
         Map spot_dict = new HashMap();
         int tot_spots = 0;
 
-        // Î¢µ÷
+        // å¾®è°ƒ
         Map<Integer, Integer> adj_y1 = new HashMap<Integer, Integer>();
         adj_y1.put(0, 20);
         adj_y1.put(1, -10);
@@ -232,26 +232,26 @@ public class Park {
             int num_splits = (int) Math.round(Math.abs(y2 - y1) / gap);
 
             for (int j = 0; j < num_splits + 1; j++) {
-                // ºáÖ±Ïß
+                // æ¨ªç›´çº¿
                 int y = (int) (y1 + j * gap);
 //                System.out.println(y);
                 line(delineated, new Point(x1, y), new Point(x2, y), Scalar.GREEN);
             }
 
             if (key > 0 && key < rects.size() - 1) {
-                // ÊúÖ±Ïß
+                // ç«–ç›´çº¿
                 int x = (x1 + x2) / 2;
                 line(delineated, new Point(x, y1), new Point(x, y2), Scalar.GREEN);
             }
 
-            // ¼ÆËãÊıÁ¿
+            // è®¡ç®—æ•°é‡
             if (key == 0 || key == rects.size() - 1) {
                 tot_spots += num_splits + 1;
             } else {
                 tot_spots += 2 * (num_splits + 1);
             }
 
-            // ×Öµä¶ÔÓ¦ºÃ
+            // å­—å…¸å¯¹åº”å¥½
             if (key == 0 || key == rects.size() - 1) {
                 for (int j = 0; j < num_splits + 1; j++) {
                     int cur_len = spot_dict.size();
