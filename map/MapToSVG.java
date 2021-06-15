@@ -11,7 +11,7 @@ import static org.bytedeco.opencv.global.opencv_imgproc.approxPolyDP;
 import static org.bytedeco.opencv.global.opencv_imgproc.arcLength;
 
 /**
- * 将提取出来的坐标和颜色，转换成SVG图像
+ * 灏嗘彁鍙栧嚭鏉ョ殑鍧愭爣鍜岄鑹诧紝杞崲鎴怱VG鍥惧儚
  *
  * @author Neal
  * @date 2021/6/14
@@ -42,7 +42,7 @@ public class MapToSVG {
         long red = Math.round(cntBGR.get(2));
         String rgb = "rgb(" + red + "," + green + "," + blue + ")";
 
-        // 获取contour在src里坐标，转换成poly减少坐标点coordinates
+        // 鑾峰彇contour鍦╯rc閲屽潗鏍囷紝杞崲鎴恜oly鍑忓皯鍧愭爣鐐筩oordinates
         double peri = arcLength(contour, true);
         Mat approx = new Mat();
         approxPolyDP(contour, approx, 0.02 * peri, true);

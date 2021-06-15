@@ -3,11 +3,11 @@ package map;
 import org.bytedeco.opencv.opencv_core.Scalar;
 
 /**
- * ��ȡ���������ɫ��ԭͼ���ԭɫ���������൱��������ȡ����Χֵ
+ * 提取轮廓里的颜色和原图里的原色并不绝对相当，这里先取个范围值
  * Ex:
- * ��ɫ��ȡ������
+ * 黄色提取出来是
  * rgb(249.62991573033707,249.63600187265916,8.397705992509364)
- * ��ԭͼȡɫ������ȡ����
+ * 而原图取色器里提取的是
  * (255, 255, 0) or (255, 255, 1)
  *
  * @author Neal
@@ -16,7 +16,7 @@ import org.bytedeco.opencv.opencv_core.Scalar;
 public class MapColorMatcher {
 
     /**
-     * ��������ɫ���ֵ
+     * 允许的颜色误差值
      */
     private static final int THRESHOLD = 10;
 

@@ -21,10 +21,10 @@ public class Test {
         ImageWindowUtil.imshow("COLOR_BGR2GRAY", src);
 
         /*
-        * IMG: Êı¾İÀàĞÍÎªfloat32µÄÈëÍ¼Ïñ
-        * blockSize£º½Çµã¼ì²âÖĞÖ¸¶¨ÇøÓòµÄ´óĞ¡
-        * ksize£ºSobelÇóµ¼ÖĞÊ¹ÓÃ´°¿ÚµÄ´óĞ¡
-        * k£ºÈ¡Öµ²ÎÊıÎª[0.04, 0.06]
+        * IMG: æ•°æ®ç±»å‹ä¸ºfloat32çš„å…¥å›¾åƒ
+        * blockSizeï¼šè§’ç‚¹æ£€æµ‹ä¸­æŒ‡å®šåŒºåŸŸçš„å¤§å°
+        * ksizeï¼šSobelæ±‚å¯¼ä¸­ä½¿ç”¨çª—å£çš„å¤§å°
+        * kï¼šå–å€¼å‚æ•°ä¸º[0.04, 0.06]
          */
         cornerHarris(src, src, 2, 3, 0.04);
         ImageWindowUtil.imshow("cornerHarris", src);

@@ -9,7 +9,7 @@ import java.util.List;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
 
 /**
- * Map处理入口程序
+ * Map澶勭悊鍏ュ彛绋嬪簭
  *
  * @author Neal
  * @date 2021/6/14
@@ -22,18 +22,18 @@ public class MapProcessor {
 
         List<ContourData> contourDataList = new ArrayList<>();
 
-        // 区块
+        // 鍖哄潡
         List<ContourData> blockContours = MapAnalysis.process(src);
         contourDataList.addAll(blockContours);
 
-        // 颜色图例
+        // 棰滆壊鍥句緥
         List<ContourData> colorSampleContours = MapColorSampleAnalysis.process(src);
         contourDataList.addAll(colorSampleContours);
 
-        // TODO: tessaract识别中文
+        // TODO: tessaract璇嗗埆涓枃
         MapOCR.process(src);
 
-        // 生成SVG
+        // 鐢熸垚SVG
         MapToSVG.process(src, contourDataList);
     }
 }
