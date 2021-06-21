@@ -170,9 +170,9 @@
 
 参照课程：土地规划图转SVG
 
-采坑笔记：[土地规划图绘制分区实现过程](partition/partition.md)
+采坑笔记：[pycv-sample](https://github.com/nooshhub/pycv-sample)
 
-代码: partition
+代码: [pycv-sample](https://github.com/nooshhub/pycv-sample)
 
-状态: 10%， 按照xmind整理出来的信息显示，应该是一个二维矩阵，类似相邻岛屿的问题，找出需要连接在一起的区块。
+状态: 100%， 按照xmind整理出来的信息显示，应该是一个二维矩阵，类似相邻岛屿的问题，找出需要连接在一起的区块。
 
